@@ -42,6 +42,10 @@ nav{
     border-radius: 10px;
     font-size: 20px;
 }
+.nav-button:hover{
+    opacity: 80%;
+    cursor: pointer;
+}
 
 .hero-container{
     margin: 0;
@@ -61,6 +65,7 @@ nav{
     margin-left: 20px;
     color: var(--white);
     font-size: 40px;
+    margin-bottom: 100px;
 }
 .introduction-container *{
     margin: 0;
@@ -102,15 +107,15 @@ nav{
     z-index: 5;
 }
 #seaweed3{
-    width: 200px;
-    height: 200px;
+    width: clamp(100px, 40vmin,400px);
+    height: clamp(100px, 40vmin,400px);
     left: 10vw;
     z-index: 5;
 }
 #coral1{
-    width: 150px;
-    height: 150px;
-    bottom: -35px;
+    width: clamp(100px, 20vmin,200px);
+    height: clamp(100px, 20vmin,200px);
+    bottom: -3vh;
     left: 5vw;
     z-index: 4;
 }
@@ -119,4 +124,13 @@ nav{
     height: clamp(100px, 40vmin,1000px);
     right: 1vw;
     z-index: 3;
+}
+
+canvas{
+    position: absolute;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
