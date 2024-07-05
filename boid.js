@@ -10,23 +10,27 @@ class Vector{
     }
 
     add(otherVector){
-        return new Vector(this.x + otherVector.x, this.y + otherVector.y);
+        this.x += otherVector.x;
+        this.y += otherVector.y;
     }
     div(divisor){
-        return new Vector(this.x / divisor, this.y / divisor);
+        this.x /= divisor;
+        this.y /= divisor;
     }
     sub(otherVector){
-        return new Vector(this.x - otherVector.x,this.y - otherVector.y);
+        this.x -= otherVector.x;
+        this.y -= otherVector.y;
     }
     mul(otherVector){
-        return new Vector(this.x * otherVector.x,this.y * otherVector.y);
+        this.x *= otherVector.x;
+        this.y *= otherVector.y;
     }
     getMagnitude(){
         return Math.sqrt((this.x ** 2 + this.y ** 2));
     }
     setMagnitude(desiredMagnitude){
-        this.x * desiredMagnitude / this.getMagnitude();
-        this.y * desiredMagnitude / this.getMagnitude();
+        this.x *= desiredMagnitude / this.getMagnitude();
+        this.y *= desiredMagnitude / this.getMagnitude();
     }
 }
 
@@ -34,10 +38,6 @@ class Fish {
     constructor(){
         this.width = 20;
         this.height = 20;
-
-        // this.position = {x: Math.random() * (canvas.width - this.width/2),y: Math.random() * (canvas.height - this.height/2)};
-        // this.velocity = {x: ((Math.random() * 2) - 1),y: ((Math.random() * 2) - 1)};
-        // this.acceleration = {x:0, y:0};
 
         const randomPositionX = Math.random() * (canvas.width - this.width/2);
         const randomPositionY = Math.random() * (canvas.height - this.height/2);
@@ -63,8 +63,8 @@ class Fish {
         let alignment = vectors[0];
 
         this.acceleration = alignment;
-        this.position = this.position.add(this.velocity);
-        this.velocity = this.velocity.add(this.acceleration)
+        this.position.add(this.velocity);
+        this.velocity.add(this.acceleration);
 
         this.edges();
         this.draw();
@@ -80,7 +80,7 @@ class Fish {
         let cohesionVector = new Vector(0,0);
         let fishInRadius = 0;
 
-        
+        //accumalate all velocities and positions
         otherFish.forEach((fish) => {
             if(fish === this){
                 return;
@@ -89,13 +89,14 @@ class Fish {
             let distance = calculateDistance(this.position.x,this.position.y,fish.position.x,fish.position.y);
 
             if(distance < perception){
-                alignmnetVector = alignmnetVector.add(fish.velocity);
+                alignmnetVector.add(fish.velocity);
                 fishInRadius++;
             }
         })
+
         if(fishInRadius){
-            alignmnetVector = alignmnetVector.div(fishInRadius);
-            alignmnetVector = alignmnetVector.sub(this.velocity);
+            alignmnetVector.div(fishInRadius);
+            alignmnetVector.sub(this.velocity);
         }
 
         return [alignmnetVector];
