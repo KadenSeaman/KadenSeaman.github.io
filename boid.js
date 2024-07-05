@@ -32,6 +32,11 @@ class Vector{
         this.x *= desiredMagnitude / this.getMagnitude();
         this.y *= desiredMagnitude / this.getMagnitude();
     }
+    limitMagnitude(desiredLimit){
+        if(this.getMagnitude() > desiredLimit){
+            this.setMagnitude(desiredLimit);
+        }
+    }
 }
 
 class Fish {
@@ -49,6 +54,10 @@ class Fish {
         this.position = new Vector(randomPositionX, randomPositionY);
         this.velocity = new Vector(randomVelocityX, randomVelocityY);
         this.acceleration = new Vector(0,0);
+
+        this.maxForce = 0.005;
+        this.maxSpeed = 1;
+        this.perception = 100;
     }
 
     draw(){
@@ -71,13 +80,9 @@ class Fish {
     }
 
     flock(otherFish){
-        let perception = 100;
-        let maxSteering = 1;
-        let maxSpeed = 2;
-        //TODO IMPLEMENT MAXES
-
         let alignmnetVector = new Vector(0,0);
         let cohesionVector = new Vector(0,0);
+
         let fishInRadius = 0;
 
         //accumalate all velocities and positions
@@ -88,7 +93,7 @@ class Fish {
 
             let distance = calculateDistance(this.position.x,this.position.y,fish.position.x,fish.position.y);
 
-            if(distance < perception){
+            if(distance < this.perception){
                 alignmnetVector.add(fish.velocity);
                 fishInRadius++;
             }
@@ -96,7 +101,9 @@ class Fish {
 
         if(fishInRadius){
             alignmnetVector.div(fishInRadius);
+            alignmnetVector.setMagnitude(this.maxSpeed)
             alignmnetVector.sub(this.velocity);
+            alignmnetVector.limitMagnitude(this.maxForce);
         }
 
         return [alignmnetVector];
@@ -138,7 +145,7 @@ const startGame = () => {
     canvas.width = fishContainerDiv.clientWidth;
     canvas.height = fishContainerDiv.clientHeight;
 
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 10; i++){
         fishFlock.push(new Fish())
     }
     
