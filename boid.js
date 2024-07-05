@@ -3,39 +3,83 @@ const startButton = document.getElementById("start-btn");
 const ctx = canvas.getContext("2d");
 const fishContainerDiv = document.getElementById("hero-container");
 
+class Vector{
+    constructor(x,y){
+        this.x = x;
+        this.y = y;
+    }
+
+    add(otherVector){
+        return new Vector(this.x + otherVector.x, this.y + otherVector.y);
+    }
+    div(divisor){
+        return new Vector(this.x / divisor, this.y / divisor);
+    }
+    sub(otherVector){
+        return new Vector(this.x - otherVector.x,this.y - otherVector.y);
+    }
+    mul(otherVector){
+        return new Vector(this.x * otherVector.x,this.y * otherVector.y);
+    }
+    getMagnitude(){
+        return Math.sqrt((this.x ** 2 + this.y ** 2));
+    }
+    setMagnitude(desiredMagnitude){
+        this.x * desiredMagnitude / this.getMagnitude();
+        this.y * desiredMagnitude / this.getMagnitude();
+    }
+}
 
 class Fish {
     constructor(){
         this.width = 20;
         this.height = 20;
-        this.position = {x: Math.random() * (canvas.width - this.width/2),y: Math.random() * (canvas.height - this.height/2)};
-        this.velocity = {x: ((Math.random() * 2) - 1),y: ((Math.random() * 2) - 1)};
-        this.acceleration = {x:0, y:0};
+
+        // this.position = {x: Math.random() * (canvas.width - this.width/2),y: Math.random() * (canvas.height - this.height/2)};
+        // this.velocity = {x: ((Math.random() * 2) - 1),y: ((Math.random() * 2) - 1)};
+        // this.acceleration = {x:0, y:0};
+
+        const randomPositionX = Math.random() * (canvas.width - this.width/2);
+        const randomPositionY = Math.random() * (canvas.height - this.height/2);
+
+        const randomVelocityX = ((Math.random() * 2) - 1);
+        const randomVelocityY = ((Math.random() * 2) - 1);
+
+
+        this.position = new Vector(randomPositionX, randomPositionY);
+        this.velocity = new Vector(randomVelocityX, randomVelocityY);
+        this.acceleration = new Vector(0,0);
     }
 
     draw(){
         ctx.fillStyle = "red";
         ctx.fillRect(this.position.x,this.position.y,this.width,this.height);
     }
+
+
     update(otherFish){
-        this.flock(otherFish);
+        let vectors = this.flock(otherFish);
 
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
+        let alignment = vectors[0];
 
-        this.velocity.x += this.acceleration.x;
-        this.velocity.y += this.acceleration.y;
+        this.acceleration = alignment;
+        this.position = this.position.add(this.velocity);
+        this.velocity = this.velocity.add(this.acceleration)
 
         this.edges();
         this.draw();
-
     }
-    align(otherFish){
+
+    flock(otherFish){
         let perception = 100;
-        let steering = {x: 0,y: 0};
-        let fishInRadius = 0;
         let maxSteering = 1;
         let maxSpeed = 2;
+        //TODO IMPLEMENT MAXES
+
+        let alignmnetVector = new Vector(0,0);
+        let cohesionVector = new Vector(0,0);
+        let fishInRadius = 0;
+
         
         otherFish.forEach((fish) => {
             if(fish === this){
@@ -45,30 +89,16 @@ class Fish {
             let distance = calculateDistance(this.position.x,this.position.y,fish.position.x,fish.position.y);
 
             if(distance < perception){
-                steering.x += fish.velocity.x;
-                steering.y += fish.velocity.y;
+                alignmnetVector = alignmnetVector.add(fish.velocity);
                 fishInRadius++;
             }
         })
         if(fishInRadius){
-            steering.x /= fishInRadius;
-            steering.y /= fishInRadius;
-
-            if (steering.x <= 0){
-                steering.x = Math.max(steering.x - this.velocity.x,-maxSteering);
-            }
-            else{
-                steering.x = Math.min(steering.x - this.velocity.x,maxSteering);
-            }
-            if (steering.y <= 0){
-                steering.y = Math.max(steering.y - this.velocity.y,-maxSteering);
-            }
-            else{
-                steering.y = Math.min(steering.y - this.velocity.y,maxSteering);
-            }
+            alignmnetVector = alignmnetVector.div(fishInRadius);
+            alignmnetVector = alignmnetVector.sub(this.velocity);
         }
 
-        return steering;
+        return [alignmnetVector];
     }
 
     edges(){
@@ -85,13 +115,9 @@ class Fish {
             this.position.y = 10;
         }
     }
-
-    flock(otherFish){
-        let alignment = this.align(otherFish);
-        this.acceleration.x = alignment.x;
-        this.acceleration.y = alignment.y;
-    }
 }
+
+const fishFlock = [];
 
 const calculateDistance = (x1,y1,x2,y2) => {
     return Math.sqrt((x2 - x1) ** 2 + (y2-y1) ** 2);
@@ -100,8 +126,6 @@ const calculateDistance = (x1,y1,x2,y2) => {
 const proportionalSize = (size) => {
     return innerHeight < 500 ? Math.ceil((size / 500) * innerHeight) : size;
 }
-
-const fishFlock = [];
 
 const animate = () => {
     requestAnimationFrame(animate);
@@ -116,10 +140,7 @@ const startGame = () => {
     for(let i = 0; i < 50; i++){
         fishFlock.push(new Fish())
     }
-
-    const p = createVector();
-    console.log(p);
-
+    
     animate();
 }
 
