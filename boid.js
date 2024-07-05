@@ -3,6 +3,17 @@ const startButton = document.getElementById("start-btn");
 const ctx = canvas.getContext("2d");
 const fishContainerDiv = document.getElementById("hero-container");
 
+
+/*
+TODO:
+
+Replace fish image
+avoid pointer
+
+*/
+
+
+
 class Vector{
     constructor(x,y){
         this.x = x;
@@ -21,16 +32,20 @@ class Vector{
         this.x -= otherVector.x;
         this.y -= otherVector.y;
     }
-    mul(otherVector){
-        this.x *= otherVector.x;
-        this.y *= otherVector.y;
+    static sub(vector1,vector2){
+        return new Vector(vector1.x - vector2.x,vector1.y - vector2.y);
+    }
+    mul(multiplier){
+        this.x *= multiplier;
+        this.y *= multiplier;
     }
     getMagnitude(){
         return Math.sqrt((this.x ** 2 + this.y ** 2));
     }
     setMagnitude(desiredMagnitude){
-        this.x *= desiredMagnitude / this.getMagnitude();
-        this.y *= desiredMagnitude / this.getMagnitude();
+        const currentmagnitude = this.getMagnitude();
+        this.x *= desiredMagnitude / currentmagnitude;
+        this.y *= desiredMagnitude / currentmagnitude;
     }
     limitMagnitude(desiredLimit){
         if(this.getMagnitude() > desiredLimit){
@@ -55,8 +70,8 @@ class Fish {
         this.velocity = new Vector(randomVelocityX, randomVelocityY);
         this.acceleration = new Vector(0,0);
 
-        this.maxForce = 0.005;
-        this.maxSpeed = 1;
+        this.maxForce = .6;
+        this.maxSpeed = 4;
         this.perception = 100;
     }
 
@@ -70,10 +85,17 @@ class Fish {
         let vectors = this.flock(otherFish);
 
         let alignment = vectors[0];
+        let cohesion = vectors[1];
+        let seperation = vectors[2];
 
-        this.acceleration = alignment;
+        this.acceleration.add(alignment);
+        this.acceleration.add(cohesion);
+        this.acceleration.add(seperation);
+
         this.position.add(this.velocity);
         this.velocity.add(this.acceleration);
+        this.velocity.limitMagnitude(this.maxSpeed);
+        this.acceleration.mul(0);
 
         this.edges();
         this.draw();
@@ -82,6 +104,7 @@ class Fish {
     flock(otherFish){
         let alignmnetVector = new Vector(0,0);
         let cohesionVector = new Vector(0,0);
+        let seperationVector = new Vector(0,0);
 
         let fishInRadius = 0;
 
@@ -91,11 +114,23 @@ class Fish {
                 return;
             }
 
-            let distance = calculateDistance(this.position.x,this.position.y,fish.position.x,fish.position.y);
+            let distance = calculateDistance(
+                this.position.x,
+                this.position.y,
+                fish.position.x,
+                fish.position.y
+            );
 
             if(distance < this.perception){
                 alignmnetVector.add(fish.velocity);
-                fishInRadius++;
+
+                cohesionVector.add(fish.position);
+
+                let avoidanceVector = Vector.sub(this.position,fish.position);
+                avoidanceVector.div(distance ** 2);
+                seperationVector.add(avoidanceVector);
+
+                fishInRadius++; 
             }
         })
 
@@ -104,9 +139,23 @@ class Fish {
             alignmnetVector.setMagnitude(this.maxSpeed)
             alignmnetVector.sub(this.velocity);
             alignmnetVector.limitMagnitude(this.maxForce);
+
+            //cohesionVector is currently the average position
+            cohesionVector.div(fishInRadius);
+            cohesionVector.sub(this.position);
+
+            //cohesionVector is now a vector
+            cohesionVector.setMagnitude(this.maxSpeed);
+            cohesionVector.sub(this.velocity);
+            cohesionVector.limitMagnitude(this.maxForce);
+
+            seperationVector.div(fishInRadius);
+            seperationVector.setMagnitude(this.maxSpeed);
+            seperationVector.sub(this.velocity);
+            seperationVector.limitMagnitude(this.maxForce * 1.0005)
         }
 
-        return [alignmnetVector];
+        return [alignmnetVector,cohesionVector,seperationVector];
     }
 
     edges(){
@@ -138,21 +187,19 @@ const proportionalSize = (size) => {
 const animate = () => {
     requestAnimationFrame(animate);
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    fishFlock.forEach((fish) => fish.update(fishFlock))
+    const snapshotOfFlock = [...fishFlock];
+    fishFlock.forEach((fish) => fish.update(snapshotOfFlock))
 }
 
 const startGame = () => {
     canvas.width = fishContainerDiv.clientWidth;
     canvas.height = fishContainerDiv.clientHeight;
 
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 50; i++){
         fishFlock.push(new Fish())
     }
     
     animate();
 }
 
-startButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    startGame();
-})
+document.querySelector("body").addEventListener("load", startGame())
