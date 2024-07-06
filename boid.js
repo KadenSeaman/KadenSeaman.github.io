@@ -6,12 +6,8 @@ const fishContainerDiv = document.getElementById("hero-container");
 
 /*
 TODO:
-
 Replace fish image
-Fix origin on fish
-avoid pointer
-scale fish properly on window resize
-
+Vision radius
 */
 
 
@@ -76,19 +72,18 @@ class Fish {
         this.acceleration = new Vector(0,0);
 
         this.maxForce = .075;
-        this.maxAvoidanceForce = 1;
         this.maxSpeed = 3;
         this.perception = 100;
         this.angleLimit = 1;
     }
 
     draw(rotationAngle){
-
-            //fish need to rotate on their own origin :P
+            
         const imageFill = document.createElement("img");
         imageFill.src = "fish-png-19.png";
         
         ctx.save();
+        //fish need to rotate on their own origin :P
         ctx.translate(this.position.x + this.width/2,this.position.y - this.width/2);
         ctx.rotate(rotationAngle * Math.PI / 180);
         ctx.drawImage(imageFill,0,0,this.width,this.height);
@@ -104,10 +99,12 @@ class Fish {
         let alignment = vectors[0];
         let cohesion = vectors[1];
         let seperation = vectors[2];
+        let mouseAvoidance = vectors[3];
 
         this.acceleration.add(alignment);
         this.acceleration.add(cohesion);
         this.acceleration.add(seperation);
+        this.acceleration.add(mouseAvoidance);
 
         this.position.add(this.velocity);
         this.velocity.add(this.acceleration);
@@ -126,6 +123,7 @@ class Fish {
         let alignmnetVector = new Vector(0,0);
         let cohesionVector = new Vector(0,0);
         let seperationVector = new Vector(0,0);
+        let mouseAvoidanceVector = new Vector(0,0);
 
         let fishInRadius = 0;
 
@@ -175,8 +173,25 @@ class Fish {
             seperationVector.sub(this.velocity);
             seperationVector.limitMagnitude(this.maxForce);
         }
+        let mouseDistance = calculateDistance(
+            this.position.x,
+            this.position.y,
+            mousePos.x,
+            mousePos.y
+        );
 
-        return [alignmnetVector,cohesionVector,seperationVector];
+        if(mouseDistance < this.perception){
+            mouseAvoidanceVector = Vector.sub(this.position, mousePos);
+            mouseAvoidanceVector.div(mouseDistance ** 2);
+            mouseAvoidanceVector.setMagnitude(this.maxSpeed);
+            mouseAvoidanceVector.sub(this.velocity);
+            mouseAvoidanceVector.limitMagnitude(this.maxForce + .5);
+        }
+
+        
+
+
+        return [alignmnetVector,cohesionVector,seperationVector,mouseAvoidanceVector];
     }
 
     edges(){
@@ -195,11 +210,15 @@ class Fish {
     }
 }
 
-const fishFlock = [];
+let fishFlock = [];
 let scrollY = 0;
+let animationID;
+let mousePos = new Vector(0,0);
 
-const getCursorOnCanvasPosition = (event) => {
- 
+
+const getCursorPosition = (e) => {
+    mousePos.x = e.clientX;
+    mousePos.y = e.clientY;
 }
 
 const calculateDistance = (x1,y1,x2,y2) => {
@@ -211,17 +230,22 @@ const proportionalSize = (size) => {
 }
 
 const animate = () => {
-    requestAnimationFrame(animate);
+    animationID = requestAnimationFrame(animate);
+
     ctx.clearRect(0,0,canvas.width,canvas.height);
     const snapshotOfFlock = [...fishFlock];
     fishFlock.forEach((fish) => fish.update(snapshotOfFlock))
 }
 
 const startGame = () => {
+    fishFlock = [];
+
     canvas.width = fishContainerDiv.clientWidth;
     canvas.height = fishContainerDiv.clientHeight;
 
-    for(let i = 0; i < 25; i++){
+    let numberOfFish = Math.floor(Math.max(canvas.width,canvas.height) / 80)
+
+    for(let i = 0; i < numberOfFish; i++){
         fishFlock.push(new Fish())
     }
     
@@ -229,15 +253,14 @@ const startGame = () => {
 }
 
 document.querySelector("body").addEventListener("load", startGame());
-onmousemove = e => {
-    let y = e.clientY;
 
-    y -= 100;
-    y += scrollY;
-
-    console.log(y);
-};
+onmousemove = e => getCursorPosition(e);
 
 window.addEventListener("scroll", () => {
     scrollY = window.scrollY;
 })
+window.addEventListener('resize', () => {
+    //reset game on window resize
+    cancelAnimationFrame(animationID);
+    startGame();
+});
