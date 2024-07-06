@@ -8,7 +8,9 @@ const fishContainerDiv = document.getElementById("hero-container");
 TODO:
 
 Replace fish image
+Fix origin on fish
 avoid pointer
+scale fish properly on window resize
 
 */
 
@@ -52,11 +54,14 @@ class Vector{
             this.setMagnitude(desiredLimit);
         }
     }
+    getDirectionAngle(){
+        return Math.atan2(this.y,this.x) * (180/Math.PI);
+    }
 }
 
 class Fish {
     constructor(){
-        this.width = 20;
+        this.width = 40;
         this.height = 20;
 
         const randomPositionX = Math.random() * (canvas.width - this.width/2);
@@ -70,18 +75,30 @@ class Fish {
         this.velocity = new Vector(randomVelocityX, randomVelocityY);
         this.acceleration = new Vector(0,0);
 
-        this.maxForce = .6;
-        this.maxSpeed = 4;
+        this.maxForce = .075;
+        this.maxAvoidanceForce = 1;
+        this.maxSpeed = 3;
         this.perception = 100;
+        this.angleLimit = 1;
     }
 
-    draw(){
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.position.x,this.position.y,this.width,this.height);
+    draw(rotationAngle){
+
+            //fish need to rotate on their own origin :P
+        const imageFill = document.createElement("img");
+        imageFill.src = "fish-png-19.png";
+        
+        ctx.save();
+        ctx.translate(this.position.x + this.width/2,this.position.y - this.width/2);
+        ctx.rotate(rotationAngle * Math.PI / 180);
+        ctx.drawImage(imageFill,0,0,this.width,this.height);
+        ctx.restore();
     }
 
 
     update(otherFish){
+        let prevAngle = this.velocity.getDirectionAngle();
+
         let vectors = this.flock(otherFish);
 
         let alignment = vectors[0];
@@ -97,8 +114,12 @@ class Fish {
         this.velocity.limitMagnitude(this.maxSpeed);
         this.acceleration.mul(0);
 
+        const currentAngle = this.velocity.getDirectionAngle();
+
+        let rotationAngle = Math.abs(currentAngle - prevAngle) > this.angleLimit ? currentAngle : prevAngle;
+
         this.edges();
-        this.draw();
+        this.draw(rotationAngle);
     }
 
     flock(otherFish){
@@ -152,7 +173,7 @@ class Fish {
             seperationVector.div(fishInRadius);
             seperationVector.setMagnitude(this.maxSpeed);
             seperationVector.sub(this.velocity);
-            seperationVector.limitMagnitude(this.maxForce * 1.0005)
+            seperationVector.limitMagnitude(this.maxForce);
         }
 
         return [alignmnetVector,cohesionVector,seperationVector];
@@ -175,6 +196,11 @@ class Fish {
 }
 
 const fishFlock = [];
+let scrollY = 0;
+
+const getCursorOnCanvasPosition = (event) => {
+ 
+}
 
 const calculateDistance = (x1,y1,x2,y2) => {
     return Math.sqrt((x2 - x1) ** 2 + (y2-y1) ** 2);
@@ -195,11 +221,23 @@ const startGame = () => {
     canvas.width = fishContainerDiv.clientWidth;
     canvas.height = fishContainerDiv.clientHeight;
 
-    for(let i = 0; i < 50; i++){
+    for(let i = 0; i < 25; i++){
         fishFlock.push(new Fish())
     }
     
     animate();
 }
 
-document.querySelector("body").addEventListener("load", startGame())
+document.querySelector("body").addEventListener("load", startGame());
+onmousemove = e => {
+    let y = e.clientY;
+
+    y -= 100;
+    y += scrollY;
+
+    console.log(y);
+};
+
+window.addEventListener("scroll", () => {
+    scrollY = window.scrollY;
+})
