@@ -3,6 +3,8 @@
     --bg-murky: #3e4258;
     --white: #f1faee;
     --red: #e63946;
+    --scroll-shadow: #8e7f63;
+    --scroll-base: #c0ad85;
 }
 
 *{
@@ -137,4 +139,161 @@ canvas{
     width: 100%;
     margin: 0;
     padding: 0;
+}
+
+.portfolio-container{
+    background: linear-gradient(
+        var(--bg-murky),
+        white 20px
+    );
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.portfolio-container h1{
+    width: 100%;
+    text-align: center;
+    color: var(--red)
+}
+.portfolio-card-container{
+    /* border: 1px solid black; */
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    width: 100%;
+    gap: 50px;
+    place-items: center;
+}
+.portfolio-card{
+    width: 400px;
+    height: 450px;
+    position: relative;
+}
+.portfolio-card-title{
+    z-index: 3;
+    width: 100%;
+    position: absolute;
+    font-size: clamp(10px, 5vmin, 20px);
+
+    top: 12%
+}
+.portfolio-img{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    z-index: 4;
+    border: 5px solid var(--scroll-shadow);
+    top: 30%;
+    left: 21%;
+}
+.p-title-1{
+    left: 21%;
+}
+.p-title-2{
+    left: 13%
+}
+.p-title-3{
+    left: 10%
+}
+.p-title-4{
+    left: 19%
+}
+.portfolio-img:hover{
+    opacity: 60%;
+    cursor:pointer;
+}
+
+.top-edge{
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 80%;
+    height: 20%;
+    background: linear-gradient(
+        var(--scroll-base),
+        var(--scroll-shadow)
+    );
+    z-index: 1;
+}
+.top-left-edge{
+    position: absolute;
+    width: 10%;
+    height: 20%;
+    background-color: var(--scroll-shadow);
+    border-radius: 60%;
+    top:0;
+    left:0;
+    z-index: 2;
+}
+.top-right-edge{
+    position: absolute;
+    width: 10%;
+    height: 20%;
+    background: linear-gradient(
+        var(--scroll-base),
+        var(--scroll-shadow)
+    );
+    border-radius: 60%;
+    top:0;
+    right: 10%;
+    z-index: 2;
+}
+.scroll-page{
+    position: absolute;
+    width: 82%;
+    height: 75%;
+    background-color: var(--scroll-base);
+    top: 50px;
+    left: 5%;
+    border: 5px solid var(--scroll-shadow)
+}
+
+.bottom-edge{
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 20%;
+    background: linear-gradient(
+        var(--scroll-base),
+        var(--scroll-shadow)
+    );
+    z-index: 1;
+}
+.bottom-left-edge{
+    position: absolute;
+    width: 10%;
+    height: 20%;
+    background-color: var(--scroll-shadow);
+    border-radius: 60%;
+    bottom:0;
+    left:5%;
+    z-index: 2;
+}
+.bottom-right-edge{
+    position: absolute;
+    width: 10%;
+    height: 20%;
+    background: linear-gradient(
+        var(--scroll-base),
+        var(--scroll-shadow)
+    );
+    border-radius: 60%;
+    bottom:0;
+    right: 5%;
+    z-index: 2;
+    
+}
+
+@media screen and (max-width: 935px) {
+    .portfolio-card-container{
+        grid-template-columns: 1fr;
+    }
+}
+@media screen and (min-width: 2000px) {
+    .portfolio-card-container{
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
 }

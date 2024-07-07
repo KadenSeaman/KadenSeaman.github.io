@@ -4,11 +4,7 @@ const ctx = canvas.getContext("2d");
 const fishContainerDiv = document.getElementById("hero-container");
 
 
-/*
-TODO:
-Replace fish image
-*/
-
+//when i draw a new fish, make sure the center of mass is equal on the y axis
 
 
 class Vector{
@@ -88,8 +84,11 @@ class Fish {
 
         ctx.save();
         //fish need to rotate on their own origin :P
-        ctx.translate(this.position.x + this.width/2,this.position.y - this.width/2);
+        ctx.translate(this.position.x + this.width/2,this.position.y - this.height/2);
         ctx.rotate(rotationAngle * Math.PI / 180);
+        if(rotationAngle < -90 || rotationAngle > 90){
+            ctx.scale(1,-1);
+        }
         ctx.filter = `sepia() hue-rotate(${this.color}deg)`;
         ctx.drawImage(imageFill,0,0,this.width,this.height);
         ctx.restore();
@@ -117,6 +116,8 @@ class Fish {
         this.acceleration.mul(0);
 
         const currentAngle = this.velocity.getDirectionAngle();
+
+
 
         let rotationAngle = Math.abs(currentAngle - prevAngle) > this.angleLimit ? currentAngle : prevAngle;
 
