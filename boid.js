@@ -7,7 +7,6 @@ const fishContainerDiv = document.getElementById("hero-container");
 /*
 TODO:
 Replace fish image
-Vision radius
 */
 
 
@@ -75,17 +74,23 @@ class Fish {
         this.maxSpeed = 3;
         this.perception = 100;
         this.angleLimit = 1;
+
+        this.color = Math.floor(Math.random() * 360);
     }
+
+
 
     draw(rotationAngle){
             
         const imageFill = document.createElement("img");
-        imageFill.src = "fish-png-19.png";
-        
+
+        imageFill.src = "fish.png";
+
         ctx.save();
         //fish need to rotate on their own origin :P
         ctx.translate(this.position.x + this.width/2,this.position.y - this.width/2);
         ctx.rotate(rotationAngle * Math.PI / 180);
+        ctx.filter = `sepia() hue-rotate(${this.color}deg)`;
         ctx.drawImage(imageFill,0,0,this.width,this.height);
         ctx.restore();
     }
@@ -215,10 +220,19 @@ let scrollY = 0;
 let animationID;
 let mousePos = new Vector(0,0);
 
+const getRandomColor = () => {
+    const listOfColorsHex = ["#fff"];
+
+    const randomColorIndex = Math.floor(Math.random() * (listOfColorsHex.length - 1));
+
+
+}
 
 const getCursorPosition = (e) => {
+    //gets mouse position relative to the canvas
     mousePos.x = e.clientX;
-    mousePos.y = e.clientY;
+    mousePos.y = e.clientY - 100;
+    mousePos.y += window.scrollY;
 }
 
 const calculateDistance = (x1,y1,x2,y2) => {
