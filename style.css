@@ -3,6 +3,7 @@
     --bg-murky: #3e4258;
     --white: #f1faee;
     --red: #e63946;
+    --light-red: #fa7878;
     --scroll-shadow: #8e7f63;
     --scroll-base: #c0ad85;
 }
@@ -10,11 +11,14 @@
 *{
     font-family: sans-serif;
     /* border: 1px solid black; */
+    scroll-behavior: smooth;
 }
 
 body{
     margin: 0;
     padding: 0;
+    position: relative;
+
 }
 
 .white{
@@ -52,6 +56,19 @@ nav{
 .nav-button:hover{
     opacity: 80%;
     cursor: pointer;
+    text-decoration: underline;
+}
+.nav-button:focus{
+    opacity: 80%;
+    outline:none;
+    text-decoration: underline;
+}
+.nav-link:hover{        
+    text-decoration: underline;
+}
+.nav-link:focus{
+    text-decoration: underline;
+    outline: none;
 }
 
 .hero-container{
@@ -150,6 +167,7 @@ canvas{
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 .portfolio-container h1{
@@ -200,9 +218,21 @@ canvas{
 .p-title-4{
     left: 19%
 }
-.portfolio-img:hover{
+.portfolio-card > a:hover{
     opacity: 60%;
-    cursor:pointer;
+    cursor: pointer;
+}
+.portfolio-card > a:focus{
+    opacity: 99%;
+    z-index: 5;
+}
+.portfolio-bookmark{
+    z-index: 15;
+    width: 100px;
+    height: 100px;
+    background-color: transparent;
+    position: absolute;
+    top: -100px;
 }
 
 .top-edge{
@@ -287,7 +317,7 @@ canvas{
     
 }
 
-@media screen and (max-width: 935px) {
+@media screen and (max-width: 1075px) {
     .portfolio-card-container{
         grid-template-columns: 1fr;
     }
@@ -296,4 +326,100 @@ canvas{
     .portfolio-card-container{
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
+}
+
+
+
+.contact-me{
+    position: fixed;
+    top:0;
+    left:0;
+    height: 100vh;
+    width: 100%;
+    place-items: center;
+    z-index: 10;
+    display: none;
+}
+
+.contact-me-bg{
+    width: 100%;
+    height: 100%;
+    background-color: hsla(0,100%,100%,0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+.contact-me-card{
+    z-index: 11;
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(
+        var(--light-red),
+        var(--red)
+    );
+    border-radius: 5px;
+    padding: 10px;
+    position: relative;
+    color: var(--white);
+}
+.close-contact-me-button{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-weight: bold;
+    cursor: pointer;
+}
+.contact-me-card > h1 {
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: .01em;
+}
+.contact-me-card > form{
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.contact-me-card > form > input {
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid white;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    color: var(--white);
+    height: 20px;
+}
+#message {
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid white;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    color: var(--white);
+    height: 20px;
+}
+.contact-me-card > form > input:focus {
+    outline: 1px solid var(--white);
+}
+.contact-me-card > form > label {
+    width: 100%;
+    font-size: 12px;
+}
+#contact-me-submit-button{
+    background-color: var(--bg-murky);
+    width: 50%;
+    height: 50px;
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
 }

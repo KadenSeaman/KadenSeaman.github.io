@@ -13,7 +13,7 @@
 <body>
     <nav>
         <a class="nav-link" href="https://github.com/KadenSeaman" target ="_blank">Github</a>
-        <a class="nav-link" href="#portfolio-section">Portfolio</a>
+        <a class="nav-link" href="#portfolio-bookmark">Portfolio</a>
         <button id="start-btn" class="nav-button">Contact Me</button>
     </nav>
 
@@ -264,11 +264,11 @@
     </div>
     <div class="portfolio-container" id="portfolio-section">
       <h1 class="nautical-text">Portfolio</h1>
-
+      <div id="portfolio-bookmark" class="portfolio-bookmark"></div>
       <div class="portfolio-card-container">
          <div class="portfolio-card">
             <h6 class="nautical-text portfolio-card-title p-title-1">Palindrome Checker</h6>
-            <a href="https://codepen.io/Talinro/pen/bGPGNzw" target="_blank"><img src="Palindrome Checker.png" alt="Image showing preview of palindrome checker project" class="portfolio-img"></a>
+            <a href="https://codepen.io/Talinro/pen/bGPGNzw" target="_blank"><img src="PortfolioPNGs/Palindrome Checker.png" alt="Image showing preview of palindrome checker project" class="portfolio-img"></a>
             <div class="top-left-edge"></div>
             <div class="top-right-edge"></div>
             <div class="top-edge"></div>
@@ -279,7 +279,7 @@
          </div>
          <div class="portfolio-card">
             <h6 class="nautical-text portfolio-card-title p-title-2">Roman Numeral Converter</h6>
-            <a href="https://codepen.io/Talinro/pen/KKjKwJq" target="_blank"><img src="Roman Numeral Converter.png" alt="Image showing preview of roman numeral converter project" class="portfolio-img"></a>
+            <a href="https://codepen.io/Talinro/pen/KKjKwJq" target="_blank"><img src="PortfolioPNGs/Roman Numeral Converter.png" alt="Image showing preview of roman numeral converter project" class="portfolio-img"></a>
             <div class="top-left-edge"></div>
             <div class="top-right-edge"></div>
             <div class="top-edge"></div>
@@ -290,7 +290,7 @@
          </div>
          <div class="portfolio-card">
             <h6 class="nautical-text portfolio-card-title p-title-3">Telephone Number Validator</h6>
-            <a href="https://codepen.io/Talinro/pen/vYqYEbo" target="_blank"><img src="Telephone Number Validator.png" alt="Image showing preview of telephone number validator project" class="portfolio-img"></a>
+            <a href="https://codepen.io/Talinro/pen/vYqYEbo" target="_blank"><img src="PortfolioPNGs/Telephone Number Validator.png" alt="Image showing preview of telephone number validator project" class="portfolio-img"></a>
             <div class="top-left-edge"></div>
             <div class="top-right-edge"></div>
             <div class="top-edge"></div>
@@ -301,7 +301,7 @@
          </div>
          <div class="portfolio-card">
             <h6 class="nautical-text portfolio-card-title p-title-4">Product Landing Page</h6>
-            <a href="https://codepen.io/Talinro/pen/vYWbyoq" target="_blank"><img src="Product Landing Page.png" alt="Image showing preview of product landing page project" class="portfolio-img"></a>
+            <a href="https://codepen.io/Talinro/pen/vYWbyoq" target="_blank"><img src="PortfolioPNGs/Product Landing Page.png" alt="Image showing preview of product landing page project" class="portfolio-img"></a>
             <div class="top-left-edge"></div>
             <div class="top-right-edge"></div>
             <div class="top-edge"></div>
@@ -313,8 +313,26 @@
       </div>
     </div>
     
+    <div id="contact-me" class="contact-me">
+
+      <div class="contact-me-card">
+         <button id="contact-me-close-button" class="close-contact-me-button">X</button>
+         <h1>Contact Me</h1>
+         <form action="">
+            <label for="name">Name*:</label>
+            <input id="name" type="text" autocomplete="name">
+            <label for="email">Email*:</label>
+            <input id="email" type="text" autocomplete="email">
+            <label id="message-label" for="message">Message*:</label>
+            <textarea rows="10" cols="1" id="message" type="text"></textarea>
+            <button type="submit" id="contact-me-submit-button">Submit</button>
+         </form>
+      </div>
+      <div class="contact-me-bg"></div>
+    </div>
 
 
 <script src="boid.js"></script>
+<script src="index.js"></script>
 </body>
 </html>
