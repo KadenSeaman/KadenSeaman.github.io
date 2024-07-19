@@ -198,8 +198,8 @@ canvas{
     top: 12%
 }
 .portfolio-img{
-    width: 200px;
-    height: 200px;
+    width: 50%;
+    height: 44.5%;
     position: absolute;
     z-index: 4;
     border: 5px solid var(--scroll-shadow);
@@ -317,16 +317,6 @@ canvas{
     
 }
 
-@media screen and (max-width: 1075px) {
-    .portfolio-card-container{
-        grid-template-columns: 1fr;
-    }
-}
-@media screen and (min-width: 2000px) {
-    .portfolio-card-container{
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-}
 
 
 
@@ -422,4 +412,54 @@ canvas{
     border-radius: 5px;
     font-size: 20px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 1075px) {
+    .portfolio-card-container{
+        grid-template-columns: 1fr;
+    }
+}
+@media screen and (max-width: 600px) {
+    .portfolio-card{
+        width: 300px;
+        height: 350px;
+    }
+    .portfolio-card-title{
+        font-size: 16px;
+    }
+    .top-edge{
+        width: 82%;
+    }
+    .top-right-edge{
+        right: 8%;
+    }
+    .p-title-3{
+        left: 8%;
+    }
+    .contact-me-card{
+        width: 350px;
+        height: 600px;
+    }
+    #contact-me-submit-button{
+        width: 100%;
+        height: 50px;
+    }
+    .nav-link{
+        font-size: 16px;
+    }
+    .nav-button{
+        margin-right: 0px;
+        width: 150px;
+        font-size: 16px;
+        height: 50px;
+    }
+    nav{
+        justify-content: space-around;
+        gap: 20px;
+    }
+}
+@media screen and (min-width: 2000px) {
+    .portfolio-card-container{
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
 }
