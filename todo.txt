@@ -1,1 +1,3 @@
-Add rest api for contact me submission
+Add email submission
+touch avoidance for fishies
+

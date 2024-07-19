@@ -398,7 +398,6 @@ canvas{
     display: block;
     border: none;
     background-color: transparent;
-    border-bottom: 2px solid white;
     width: 100%;
     min-height: 200px;
     margin-bottom: 20px;
@@ -410,6 +409,9 @@ canvas{
     background-size: 100% 4ch;
     resize: none;
     overflow: hidden;
+}
+#message:focus{
+    outline: 1px solid var(--white);
 }
 .contact-me-card > form > input:focus {
     outline: 1px solid var(--white);
@@ -435,6 +437,9 @@ canvas{
     }
 }
 @media screen and (max-width: 600px) {
+    #message{
+        min-height: 115px;
+    }
     .portfolio-card{
         width: 300px;
         height: 350px;

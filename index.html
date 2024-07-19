@@ -318,13 +318,15 @@
       <div class="contact-me-card">
          <button id="contact-me-close-button" class="close-contact-me-button">X</button>
          <h1>Contact Me</h1>
-         <form action="">
-            <label for="name">Name*:</label>
-            <input id="name" type="text" autocomplete="name">
+         <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="8d938694-f3ea-4dfb-8ffb-7284bea7c785">
+            <label  for="name">Name*:</label>
+            <input required name="name"id="name" type="text" autocomplete="name">
             <label for="email">Email*:</label>
-            <input id="email" type="text" autocomplete="email">
+            <input required name="email"id="email" type="email" autocomplete="email">
             <label id="message-label" for="message">Message*:</label>
-            <textarea id="message" type="text"></textarea>
+            <textarea required name="message" id="message" type="text"></textarea>
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
             <button type="submit" id="contact-me-submit-button">Submit</button>
          </form>
       </div>
