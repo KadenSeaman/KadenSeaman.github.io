@@ -198,6 +198,10 @@ canvas{
     top: 12%
 }
 .portfolio-img{
+    width: 100%;
+    height: 100%;
+}
+.portfolio-card > a{
     width: 50%;
     height: 44.5%;
     position: absolute;
@@ -205,6 +209,18 @@ canvas{
     border: 5px solid var(--scroll-shadow);
     top: 30%;
     left: 21%;
+}
+.portfolio-card > a:focus{
+    opacity: 50%;               
+}
+.portfolio-card > a:hover{
+    opacity: 50%;               
+}
+.portfolio-img:hover{
+    opacity: 80%;
+}
+.portfolio-img:focus{
+    opacity: 80%;
 }
 .p-title-1{
     left: 21%;
@@ -218,17 +234,9 @@ canvas{
 .p-title-4{
     left: 19%
 }
-.portfolio-card > a:hover{
-    opacity: 60%;
-    cursor: pointer;
-}
-.portfolio-card > a:focus{
-    opacity: 99%;
-    z-index: 5;
-}
 .portfolio-bookmark{
     z-index: 15;
-    width: 100px;
+    width: 100px;           
     height: 100px;
     background-color: transparent;
     position: absolute;
@@ -387,14 +395,21 @@ canvas{
     height: 20px;
 }
 #message {
+    display: block;
     border: none;
     background-color: transparent;
     border-bottom: 2px solid white;
     width: 100%;
+    min-height: 200px;
     margin-bottom: 20px;
     margin-top: 10px;
     color: var(--white);
     height: 20px;
+    line-height: 4ch;
+    background-image: linear-gradient(transparent, transparent calc(4ch - 2px), var(--white) 0px);
+    background-size: 100% 4ch;
+    resize: none;
+    overflow: hidden;
 }
 .contact-me-card > form > input:focus {
     outline: 1px solid var(--white);

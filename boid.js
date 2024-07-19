@@ -271,7 +271,9 @@ window.addEventListener("scroll", () => {
     scrollY = window.scrollY;
 })
 window.addEventListener('resize', () => {
-    //reset game on window resize
-    cancelAnimationFrame(animationID);
-    startGame();
+    if(window.innerWidth > 800){
+        //reset game on window resize
+        cancelAnimationFrame(animationID);
+        startGame();
+    }
 });
