@@ -449,6 +449,9 @@ canvas{
     }
 }
 @media screen and (max-width: 600px) {
+    *{
+        overflow-x: hidden;
+    }
     #headshot-link{
         display: none;
     }
