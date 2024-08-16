@@ -195,23 +195,29 @@ canvas{
     width: 100%;
     gap: 50px;
     place-items: center;
+    overflow-y: hidden;
 }
 .portfolio-card{
     width: 400px;
     height: 450px;
     position: relative;
+    margin-bottom: 20px;
 }
 .portfolio-card-title{
     z-index: 3;
-    width: 100%;
+    text-align: center;
+    width: 80%;
+    height: 20px;
     position: absolute;
     font-size: clamp(10px, 5vmin, 20px);
-
-    top: 12%
+    left: 10%;
+    top: 12%;
 }
 .portfolio-img{
     width: 100%;
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 .portfolio-card > a{
     width: 50%;
@@ -233,18 +239,6 @@ canvas{
 }
 .portfolio-img:focus{
     opacity: 80%;
-}
-.p-title-1{
-    left: 35%;
-}
-.p-title-2{
-    left: 15%
-}
-.p-title-3{
-    left: 34%
-}
-.p-title-4{
-    left: 30%
 }
 .portfolio-bookmark{
     z-index: 15;
@@ -449,9 +443,6 @@ canvas{
     }
 }
 @media screen and (max-width: 600px) {
-    *{
-        overflow-x: hidden;
-    }
     #headshot-link{
         display: none;
     }
